@@ -136,6 +136,17 @@ export function writeStatement(f: ASTStatement, self: string | null, returns: Ty
         });
         ctx.append(`}`);
         return;
+    } else if (f.kind === 'statement_for') {
+        writeStatement(f.initializer, self, returns, ctx);
+        ctx.append(`while (${writeExpression(f.condition, ctx)}) {`);
+        ctx.inIndent(() => {
+            for (const s of f.statements) {
+                writeStatement(s, self, returns, ctx);
+            }
+            writeStatement(f.afterthought, self, returns, ctx);
+        });
+        ctx.append(`}`);
+        return;
     }
 
     throw Error('Unknown statement kind');

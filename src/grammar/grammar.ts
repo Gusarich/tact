@@ -567,6 +567,16 @@ semantics.addOperation<ASTNode>('resolve_statement', {
             ref: createRef(this)
         })
     },
+    StatementFor(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+        return createNode({
+            kind: 'statement_for',
+            initializer: arg2.resolve_statement(),
+            condition: arg4.resolve_expression(),
+            afterthought: arg6.resolve_statement(),
+            statements: arg10.children.map((v) => v.resolve_statement()),
+            ref: createRef(this)
+        })
+    },
 });
 
 // LValue

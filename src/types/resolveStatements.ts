@@ -288,6 +288,28 @@ function processStatements(statements: ASTStatement[], sctx: StatementContext, c
             ctx = r.ctx;
             sctx = r.sctx;
 
+        } else if (s.kind === 'statement_for') {
+                
+                // Process initializer
+                ctx = processStatements([s.initializer], sctx, ctx).ctx;
+
+                // Process condition
+                ctx = resolveExpression(s.condition, sctx, ctx);
+
+                // Check type
+                const expressionType = getExpType(ctx, s.condition);
+                if (expressionType.kind !== 'ref' || expressionType.name !== 'Bool' || expressionType.optional) {
+                    throwError(`Type mismatch: ${printTypeRef(expressionType)} is not assignable to bool`, s.ref);
+                }
+
+                // Process afterthought
+                ctx = processStatements([s.afterthought], sctx, ctx).ctx;
+
+                // Process inner statements
+                const r = processStatements(s.statements, sctx, ctx);
+                ctx = r.ctx;
+                sctx = r.sctx;
+
         } else {
             throw Error('Unknown statement');
         }

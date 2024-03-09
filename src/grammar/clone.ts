@@ -112,6 +112,14 @@ export function cloneNode<T extends ASTNode>(src: T): T {
             condition: cloneNode(src.condition),
             statements: src.statements.map(cloneNode),
         });
+    } else if (src.kind === 'statement_for') {
+        return cloneASTNode({
+            ...src,
+            initializer: cloneNode(src.initializer),
+            condition: cloneNode(src.condition),
+            afterthought: cloneNode(src.afterthought),
+            statements: src.statements.map(cloneNode),
+        });
     } else if (src.kind === 'def_function') {
         return cloneASTNode({
             ...src,

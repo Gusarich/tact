@@ -85,6 +85,25 @@ Tact {
                     | "external" "(" FunctionArg ")" "{" Statement* "}" --externalSimple
                     | "external" "(" stringLiteral ")" "{" Statement* "}" --externalComment
                     | "external" "(" ")" "{" Statement* "}" --externalEmpty
+    
+    // Statements available in for loop
+    ForLoopCompatibleStatement = StatementLetNoSemi
+                               | StatementExpressionNoSemi
+                               | StatementAssignNoSemi
+                               | StatementAugmentedAssignNoSemi
+    StatementLetNoSemi = let id ":" Type "=" Expression
+    StatementExpressionNoSemi = Expression
+    StatementAssignNoSemi = LValue "=" Expression
+    StatementAugmentedAssignNoSemi = StatementAugmentedAssignAddNoSemi
+                                   | StatementAugmentedAssignSubNoSemi
+                                   | StatementAugmentedAssignMulNoSemi
+                                   | StatementAugmentedAssignDivNoSemi
+                                   | StatementAugmentedAssignRemNoSemi
+    StatementAugmentedAssignAddNoSemi = LValue "+=" Expression
+    StatementAugmentedAssignSubNoSemi = LValue "-=" Expression
+    StatementAugmentedAssignMulNoSemi = LValue "*=" Expression
+    StatementAugmentedAssignDivNoSemi = LValue "/=" Expression
+    StatementAugmentedAssignRemNoSemi = LValue "%=" Expression
 
     // Statements
     Statement = StatementLet
@@ -97,6 +116,7 @@ Tact {
               | StatementWhile
               | StatementRepeat
               | StatementUntil
+              | StatementFor
     StatementBlock = "{" Statement* "}"
     StatementLet = let id ":" Type "=" Expression ";"
     StatementReturn = return Expression ";" --withExpression
@@ -119,6 +139,7 @@ Tact {
     StatementWhile = while "(" Expression ")" "{" Statement* "}"
     StatementRepeat = repeat "(" Expression ")" "{" Statement* "}"
     StatementUntil = do "{" Statement* "}" until "(" Expression ")" ";"
+    StatementFor = for "(" ForLoopCompatibleStatement ";" Expression ";" ForLoopCompatibleStatement ")" "{" Statement* "}"
 
     // L-value
     LValue = id "." LValue --more
@@ -233,6 +254,7 @@ Tact {
             | repeat 
             | do 
             | until 
+            | for
             | as  
             | mutates
             | extends
@@ -259,6 +281,7 @@ Tact {
     repeat = "repeat" ~idPart
     do = "do" ~idPart
     until = "until" ~idPart
+    for = "for" ~idPart
     as = "as" ~idPart
     mutates = "mutates" ~idPart
     extends = "extends" ~idPart

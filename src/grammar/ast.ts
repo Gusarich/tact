@@ -426,13 +426,22 @@ export type ASTStatementRepeat = {
     ref: ASTRef
 }
 
+export type ASTSTatementFor = {
+    kind: 'statement_for'
+    id: number,
+    initializer: ASTStatement,
+    condition: ASTExpression,
+    afterthought: ASTStatement,
+    statements: ASTStatement[],
+    ref: ASTRef
+}
 
 //
 // Unions
 //
 
-export type ASTStatement = ASTStatementLet | ASTStatementReturn | ASTStatementExpression | ASTSTatementAssign | ASTSTatementAugmentedAssign | ASTCondition | ASTStatementWhile | ASTStatementUntil | ASTStatementRepeat;
-export type ASTNode = ASTExpression | ASTProgram | ASTStruct | ASTField | ASTContract | ASTArgument | ASTFunction | ASTOpCall | ASTStatementLet | ASTStatementReturn | ASTProgram | ASTPrimitive | ASTOpCallStatic | ASTStatementExpression | ASTNativeFunction | ASTSTatementAssign | ASTSTatementAugmentedAssign | ASTOpNew | ASTNewParameter | ASTTypeRef | ASTNull | ASTCondition | ASTInitFunction | ASTStatementWhile | ASTStatementUntil | ASTStatementRepeat | ASTReceive | ASTLvalueRef | ASTString | ASTTrait | ASTProgramImport | ASTFunction | ASTNativeFunction | ASTInitOf | ASTString | ASTConstant;
+export type ASTStatement = ASTStatementLet | ASTStatementReturn | ASTStatementExpression | ASTSTatementAssign | ASTSTatementAugmentedAssign | ASTCondition | ASTStatementWhile | ASTStatementUntil | ASTStatementRepeat | ASTSTatementFor;
+export type ASTNode = ASTExpression | ASTProgram | ASTStruct | ASTField | ASTContract | ASTArgument | ASTFunction | ASTOpCall | ASTStatementLet | ASTStatementReturn | ASTProgram | ASTPrimitive | ASTOpCallStatic | ASTStatementExpression | ASTNativeFunction | ASTSTatementAssign | ASTSTatementAugmentedAssign | ASTOpNew | ASTNewParameter | ASTTypeRef | ASTNull | ASTCondition | ASTInitFunction | ASTStatementWhile | ASTStatementUntil | ASTStatementRepeat | ASTSTatementFor | ASTReceive | ASTLvalueRef | ASTString | ASTTrait | ASTProgramImport | ASTFunction | ASTNativeFunction | ASTInitOf | ASTString | ASTConstant;
 export type ASTExpression = ASTOpBinary | ASTOpUnary | ASTOpField | ASTNumber | ASTID | ASTBoolean | ASTOpCall | ASTOpCallStatic | ASTOpNew | ASTNull | ASTLvalueRef | ASTInitOf | ASTString | ASTConditional;
 export type ASTType = ASTPrimitive | ASTStruct | ASTContract | ASTTrait;
 
@@ -605,6 +614,14 @@ export function traverse(node: ASTNode, callback: (node: ASTNode) => void) {
     }
     if (node.kind === 'statement_repeat') {
         traverse(node.condition, callback);
+        for (const e of node.statements) {
+            traverse(e, callback);
+        }
+    }
+    if (node.kind === 'statement_for') {
+        traverse(node.initializer, callback);
+        traverse(node.condition, callback);
+        traverse(node.afterthought, callback);
         for (const e of node.statements) {
             traverse(e, callback);
         }
