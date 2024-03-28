@@ -944,5 +944,25 @@ contract MapTestContract {
 
     get fun intMap1Del(key: Int): Bool {
         return self.intMap1.del(key);
+    //
+    // Slice as value
+    //
+
+    sliceMap1: map<Int, Slice>;
+
+    get fun testSliceMap1(): map<Int, Slice> {
+        self.sliceMap1.set(1, "Hello, world!".asSlice());
+        return self.sliceMap1;
+    }
+
+    //
+    // String as value
+    //
+
+    stringMap1: map<Int, String>;
+
+    get fun testStringMap1(): map<Int, String> {
+        self.stringMap1.set(1, "Hello, World!");
+        return self.stringMap1;
     }
 }

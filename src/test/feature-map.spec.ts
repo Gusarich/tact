@@ -611,6 +611,9 @@ describe("feature-map", () => {
             expect((await contract.getAddrMap7_5()).size).toBe(0);
             expect((await contract.getAddrMap7_6()).size).toBe(0);
 
+            // Test maps with Slice, String and Builder as values
+            expect(await contract.getTest()).toBeNull();
+
             // Keys for test
             const keys: bigint[] = [];
             keys.push(1n);

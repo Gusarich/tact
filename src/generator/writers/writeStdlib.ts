@@ -448,7 +448,7 @@ export function writeStdlib(ctx: WriterContext) {
     });
 
     //
-    // Dict Int -> Int
+    // Dict Int -> Uint
     //
 
     ctx.fun("__tact_dict_set_int_uint", () => {

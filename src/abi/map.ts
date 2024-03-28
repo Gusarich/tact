@@ -104,6 +104,12 @@ export const MapFunctions: Map<string, AbiFunction> = new Map([
                     } else if (self.value === "Address") {
                         ctx.used(`__tact_dict_set_${kind}_slice`);
                         return `${resolved[0]}~__tact_dict_set_${kind}_slice(${bits}, ${resolved[1]}, ${resolved[2]})`;
+                    } else if (self.value === "Slice") {
+                        ctx.used(`__tact_dict_set_${kind}_slice`);
+                        return `${resolved[0]}~__tact_dict_set_${kind}_slice(${bits}, ${resolved[1]}, ${resolved[2]})`;
+                    } else if (self.value === "String") {
+                        ctx.used(`__tact_dict_set_${kind}_slice`);
+                        return `${resolved[0]}~__tact_dict_set_${kind}_slice(${bits}, ${resolved[1]}, ${resolved[2]})`;
                     } else {
                         const t = getType(ctx.ctx, self.value);
                         if (t.kind === "contract") {
@@ -151,6 +157,12 @@ export const MapFunctions: Map<string, AbiFunction> = new Map([
                         ctx.used(`__tact_dict_set_slice_cell`);
                         return `${resolved[0]}~__tact_dict_set_slice_cell(267, ${resolved[1]}, ${resolved[2]})`;
                     } else if (self.value === "Address") {
+                        ctx.used(`__tact_dict_set_slice_slice`);
+                        return `${resolved[0]}~__tact_dict_set_slice_slice(267, ${resolved[1]}, ${resolved[2]})`;
+                    } else if (self.value === "Slice") {
+                        ctx.used(`__tact_dict_set_slice_slice`);
+                        return `${resolved[0]}~__tact_dict_set_slice_slice(267, ${resolved[1]}, ${resolved[2]})`;
+                    } else if (self.value === "String") {
                         ctx.used(`__tact_dict_set_slice_slice`);
                         return `${resolved[0]}~__tact_dict_set_slice_slice(267, ${resolved[1]}, ${resolved[2]})`;
                     } else {
@@ -256,6 +268,12 @@ export const MapFunctions: Map<string, AbiFunction> = new Map([
                     } else if (self.value === "Address") {
                         ctx.used(`__tact_dict_get_${kind}_slice`);
                         return `__tact_dict_get_${kind}_slice(${resolved[0]}, ${bits}, ${resolved[1]})`;
+                    } else if (self.value === "Slice") {
+                        ctx.used(`__tact_dict_get_${kind}_slice`);
+                        return `__tact_dict_get_${kind}_slice(${resolved[0]}, ${bits}, ${resolved[1]})`;
+                    } else if (self.value === "String") {
+                        ctx.used(`__tact_dict_get_${kind}_slice`);
+                        return `__tact_dict_get_${kind}_slice(${resolved[0]}, ${bits}, ${resolved[1]})`;
                     } else {
                         const t = getType(ctx.ctx, self.value);
                         if (t.kind === "contract") {
@@ -299,6 +317,12 @@ export const MapFunctions: Map<string, AbiFunction> = new Map([
                         ctx.used(`__tact_dict_get_slice_cell`);
                         return `__tact_dict_get_slice_cell(${resolved[0]}, 267, ${resolved[1]})`;
                     } else if (self.value === "Address") {
+                        ctx.used(`__tact_dict_get_slice_slice`);
+                        return `__tact_dict_get_slice_slice(${resolved[0]}, 267, ${resolved[1]})`;
+                    } else if (self.value === "Slice") {
+                        ctx.used(`__tact_dict_get_slice_slice`);
+                        return `__tact_dict_get_slice_slice(${resolved[0]}, 267, ${resolved[1]})`;
+                    } else if (self.value === "String") {
                         ctx.used(`__tact_dict_get_slice_slice`);
                         return `__tact_dict_get_slice_slice(${resolved[0]}, 267, ${resolved[1]})`;
                     } else {

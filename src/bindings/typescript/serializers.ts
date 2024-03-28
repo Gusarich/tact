@@ -592,6 +592,8 @@ type MapSerializerDescrValue =
     | { kind: "boolean" }
     | { kind: "address" }
     | { kind: "cell" }
+    | { kind: "slice" }
+    | { kind: "string" }
     | { kind: "struct"; type: string };
 type MapSerializerDescr = {
     key: MapSerializerDescrKey;
@@ -637,6 +639,10 @@ function getValueParser(src: MapSerializerDescrValue) {
         return "Dictionary.Values.Bool()";
     } else if (src.kind === "struct") {
         return `dictValueParser${src.type}()`;
+    } else if (src.kind === "slice") {
+        return "Dictionary.Values.Slice()";
+    } else if (src.kind === "string") {
+        return "Dictionary.Values.String()";
     } else {
         throw Error("Unreachable");
     }
@@ -730,6 +736,20 @@ const map: Serializer<MapSerializerDescr> = {
                     value = { kind: "boolean" };
                 }
             }
+            if (src.value === "slice") {
+                if (
+                    src.valueFormat === null ||
+                    src.valueFormat === undefined ||
+                    src.valueFormat === "ref"
+                ) {
+                    value = { kind: "slice" };
+                }
+            }
+            if (src.value === "string") {
+                if (src.valueFormat === null || src.valueFormat === undefined) {
+                    value = { kind: "string" };
+                }
+            }
 
             if (key && value) {
                 return { key, value };
@@ -768,6 +788,10 @@ const map: Serializer<MapSerializerDescr> = {
             valueT = `Cell`;
         } else if (v.value.kind === "struct") {
             valueT = v.value.type;
+        } else if (v.value.kind === "slice") {
+            valueT = `Slice`;
+        } else if (v.value.kind === "string") {
+            valueT = `string`;
         } else {
             throw Error("Unexpected key type");
         }

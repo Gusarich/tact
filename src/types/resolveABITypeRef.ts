@@ -267,7 +267,17 @@ export function resolveABIType(src: ASTField): ABITypeRef {
                 );
             }
         } else if (src.type.value === "Slice") {
-            throwError(`Unsupported map value type ${src.type.value}`, src.ref);
+            value = "slice";
+            if (src.type.valueAs) {
+                const format = sliceFormats[src.type.valueAs];
+                if (!format) {
+                    throwError(
+                        `Unsupported format ${src.type.valueAs} for map value`,
+                        src.ref,
+                    );
+                }
+                valueFormat = format.format;
+            }
         } else if (src.type.value === "Address") {
             value = "address";
             if (src.type.valueAs) {
@@ -277,7 +287,13 @@ export function resolveABIType(src: ASTField): ABITypeRef {
                 );
             }
         } else if (src.type.value === "String") {
-            throwError(`Unsupported map value type ${src.type.value}`, src.ref);
+            value = "string";
+            if (src.type.valueAs) {
+                throwError(
+                    `Unsupported format ${src.type.valueAs} for map value`,
+                    src.ref,
+                );
+            }
         } else if (
             src.type.value === "StringBuilder" ||
             src.type.value === "Builder"
@@ -401,7 +417,17 @@ export function createABITypeRefFromTypeRef(
                 );
             }
         } else if (src.value === "Slice") {
-            throw Error(`Unsupported map value type ${src.value}`);
+            value = "slice";
+            if (src.valueAs) {
+                const format = sliceFormats[src.valueAs];
+                if (!format) {
+                    throwError(
+                        `Unsupported format ${src.valueAs} for map value`,
+                        ref,
+                    );
+                }
+                valueFormat = format.format;
+            }
         } else if (src.value === "Address") {
             value = "address";
             if (src.valueAs) {
@@ -411,7 +437,13 @@ export function createABITypeRefFromTypeRef(
                 );
             }
         } else if (src.value === "String") {
-            throw Error(`Unsupported map value type ${src.value}`);
+            value = "string";
+            if (src.valueAs) {
+                throwError(
+                    `Unsupported format ${src.valueAs} for map value`,
+                    ref,
+                );
+            }
         } else if (src.value === "StringBuilder" || src.value === "Builder") {
             throw Error(`Unsupported map value type ${src.value}`);
         } else {
