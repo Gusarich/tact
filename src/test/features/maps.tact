@@ -195,9 +195,6 @@ contract MapTestContract {
     intMap9_5: map<Int, Int as uint128>;
     intMap9_6: map<Int, Int as uint256>;
 
-    sliceMap1: map<Int, Slice>;
-    stringMap1: map<Int, String>;
-
     receive(msg: SetIntMap1) {
         self.intMap1.set(msg.key, msg.value);
     }
@@ -947,9 +944,13 @@ contract MapTestContract {
 
     get fun intMap1Del(key: Int): Bool {
         return self.intMap1.del(key);
+    }
+    
     //
     // Slice as value
     //
+
+    sliceMap1: map<Int, Slice>;
 
     get fun testSliceMap1(): map<Int, Slice> {
         self.sliceMap1.set(1, "Hello, world!".asSlice());
@@ -959,6 +960,8 @@ contract MapTestContract {
     //
     // String as value
     //
+
+    stringMap1: map<Int, String>;
 
     get fun testStringMap1(): map<Int, String> {
         self.stringMap1.set(1, "Hello, World!");
