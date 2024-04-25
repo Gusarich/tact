@@ -81,8 +81,6 @@ export async function funcCompile(args: {
         return pointer;
     };
 
-    console.log(123);
-
     // Create module
     const logs: string[] = [];
     const mod = await CompilerModule({
@@ -182,7 +180,6 @@ export async function funcCompile(args: {
             throw Error("Unexpected compiler response");
         }
     } catch (e) {
-        console.log(223);
         args.logger.error(errorToString(e));
         throw Error("Unexpected compiler response");
     } finally {

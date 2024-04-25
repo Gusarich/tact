@@ -158,7 +158,6 @@ export async function build(args: {
             });
             if (!c.ok) {
                 logger.error(c.log);
-                console.log(c)
                 ok = false;
                 continue;
             }
