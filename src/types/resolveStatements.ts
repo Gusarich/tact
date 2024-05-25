@@ -457,6 +457,10 @@ function processStatements(
             }
 
             sctx = initialCtx; // Re-assign the modified initial context back to sctx after merging
+        } else if (s.kind === "statement_block") {
+            //
+
+            BigInt("0x" + x.toString("hex"));
         } else {
             throw Error("Unknown statement");
         }

@@ -387,6 +387,16 @@ export function writeStatement(
 
         return;
     }
+    if (f.kind === "statement_block") {
+        ctx.append("{");
+        ctx.inIndent(() => {
+            for (const s of f.statements) {
+                writeStatement(s, self, returns, ctx);
+            }
+        });
+        ctx.append("}");
+        return;
+    }
 
     throw Error("Unknown statement kind");
 }

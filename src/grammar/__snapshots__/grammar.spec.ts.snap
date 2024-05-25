@@ -5481,3 +5481,113 @@ exports[`grammar should parse case-34 1`] = `
   "kind": "program",
 }
 `;
+
+exports[`grammar should parse case-35 1`] = `
+{
+  "entries": [
+    {
+      "args": [],
+      "attributes": [],
+      "id": 12,
+      "kind": "def_function",
+      "name": "foo",
+      "origin": "user",
+      "ref": fun foo() {
+    let x: Int = 44;
+    
+    {
+        // I'm a block statement
+        let x: Int = 42;
+    }
+
+    {
+        // I'm a block statement 2
+        let x: Int = 43;
+    }
+},
+      "return": null,
+      "statements": [
+        {
+          "expression": {
+            "id": 2,
+            "kind": "number",
+            "ref": 44,
+            "value": 44n,
+          },
+          "id": 3,
+          "kind": "statement_let",
+          "name": "x",
+          "ref": let x: Int = 44;,
+          "type": {
+            "id": 1,
+            "kind": "type_ref_simple",
+            "name": "Int",
+            "optional": false,
+            "ref": Int,
+          },
+        },
+        {
+          "id": 7,
+          "kind": "statement_block",
+          "ref": {
+        // I'm a block statement
+        let x: Int = 42;
+    },
+          "statements": [
+            {
+              "expression": {
+                "id": 5,
+                "kind": "number",
+                "ref": 42,
+                "value": 42n,
+              },
+              "id": 6,
+              "kind": "statement_let",
+              "name": "x",
+              "ref": let x: Int = 42;,
+              "type": {
+                "id": 4,
+                "kind": "type_ref_simple",
+                "name": "Int",
+                "optional": false,
+                "ref": Int,
+              },
+            },
+          ],
+        },
+        {
+          "id": 11,
+          "kind": "statement_block",
+          "ref": {
+        // I'm a block statement 2
+        let x: Int = 43;
+    },
+          "statements": [
+            {
+              "expression": {
+                "id": 9,
+                "kind": "number",
+                "ref": 43,
+                "value": 43n,
+              },
+              "id": 10,
+              "kind": "statement_let",
+              "name": "x",
+              "ref": let x: Int = 43;,
+              "type": {
+                "id": 8,
+                "kind": "type_ref_simple",
+                "name": "Int",
+                "optional": false,
+                "ref": Int,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  "id": 13,
+  "kind": "program",
+}
+`;

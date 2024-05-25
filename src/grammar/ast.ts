@@ -514,6 +514,13 @@ export type ASTStatementForEach = {
     ref: ASTRef;
 };
 
+export type ASTStatementBlock = {
+    kind: "statement_block";
+    id: number;
+    statements: ASTStatement[];
+    ref: ASTRef;
+};
+
 //
 // Unions
 //
@@ -530,7 +537,8 @@ export type ASTStatement =
     | ASTStatementRepeat
     | ASTStatementTry
     | ASTStatementTryCatch
-    | ASTStatementForEach;
+    | ASTStatementForEach
+    | ASTStatementBlock;
 export type ASTNode =
     | ASTExpression
     | ASTStruct
@@ -560,6 +568,7 @@ export type ASTNode =
     | ASTStatementTry
     | ASTStatementTryCatch
     | ASTStatementForEach
+    | ASTStatementBlock
     | ASTReceive
     | ASTLvalueRef
     | ASTString
@@ -788,6 +797,11 @@ export function traverse(node: ASTNode, callback: (node: ASTNode) => void) {
         }
     }
     if (node.kind === "statement_foreach") {
+        for (const e of node.statements) {
+            traverse(e, callback);
+        }
+    }
+    if (node.kind === "statement_block") {
         for (const e of node.statements) {
             traverse(e, callback);
         }

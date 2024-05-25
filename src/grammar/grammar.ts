@@ -875,6 +875,13 @@ semantics.addOperation<ASTNode>("resolve_statement", {
             ref: createRef(this),
         });
     },
+    StatementBlock(arg0, arg1, arg2) {
+        return createNode({
+            kind: "statement_block",
+            statements: arg1.children.map((v) => v.resolve_statement()),
+            ref: createRef(this),
+        });
+    },
 });
 
 // LValue
