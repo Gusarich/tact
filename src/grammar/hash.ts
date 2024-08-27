@@ -171,6 +171,8 @@ export class AstHasher {
                 return `${node.kind}|${node.text}`;
             case "optional_type":
                 return `${node.kind}|${this.hash(node.typeArg)}`;
+            case "either_type":
+                return `${node.kind}|${this.hash(node.leftType)}|${this.hash(node.rightType)}`;
             case "map_type": {
                 const keyStorageHash = node.keyStorageType
                     ? this.hash(node.keyStorageType)

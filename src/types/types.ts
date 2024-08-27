@@ -42,6 +42,11 @@ export type TypeRef =
           optional: boolean;
       }
     | {
+          kind: "either";
+          left: TypeRef;
+          right: TypeRef;
+      }
+    | {
           kind: "map";
           key: string;
           keyAs: string | null;

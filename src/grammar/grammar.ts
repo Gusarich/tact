@@ -851,10 +851,21 @@ semantics.addOperation<AstNode>("astOfType", {
             loc: createRef(this),
         });
     },
+    Type_parenthesized(_lparen, typeId, _rparen) {
+        return typeId.astOfType();
+    },
     Type_optional(typeId, _questionMark) {
         return createAstNode({
             kind: "optional_type",
             typeArg: typeId.astOfType(),
+            loc: createRef(this),
+        });
+    },
+    Type_either(typeId1, _pipe, typeId2) {
+        return createAstNode({
+            kind: "either_type",
+            leftType: typeId1.astOfType(),
+            rightType: typeId2.astOfType(),
             loc: createRef(this),
         });
     },

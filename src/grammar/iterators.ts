@@ -165,6 +165,10 @@ export function traverse(node: AstNode, callback: (node: AstNode) => void) {
         case "optional_type":
             traverse(node.typeArg, callback);
             break;
+        case "either_type":
+            traverse(node.leftType, callback);
+            traverse(node.rightType, callback);
+            break;
         case "map_type":
             traverse(node.keyType, callback);
             if (node.keyStorageType) traverse(node.keyStorageType, callback);

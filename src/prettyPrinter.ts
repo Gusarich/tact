@@ -41,6 +41,7 @@ import {
     AstNode,
     AstFuncId,
     idText,
+    AstEitherType,
 } from "./grammar/ast";
 import { throwInternalCompilerError } from "./errors";
 import JSONbig from "json-bigint";
@@ -88,6 +89,8 @@ export class PrettyPrinter {
                 return this.ppAstBouncedMessageType(typeRef);
             case "optional_type":
                 return this.ppAstOptionalType(typeRef);
+            case "either_type":
+                return this.ppAstEitherType(typeRef);
         }
     }
 
@@ -97,6 +100,10 @@ export class PrettyPrinter {
 
     ppAstOptionalType(typeRef: AstOptionalType): string {
         return `${this.ppAstType(typeRef.typeArg)}?`;
+    }
+
+    ppAstEitherType(typeRef: AstEitherType): string {
+        return `${this.ppAstType(typeRef.leftType)} or ${this.ppAstType(typeRef.rightType)}`;
     }
 
     ppAstMapType(typeRef: AstMapType): string {
@@ -685,6 +692,7 @@ export function prettyPrint(node: AstNode): string {
         case "optional_type":
         case "map_type":
         case "bounced_message_type":
+        case "either_type":
             return pp.ppAstType(node);
         case "primitive_type_decl":
             return pp.ppAstPrimitiveTypeDecl(node);

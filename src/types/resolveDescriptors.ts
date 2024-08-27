@@ -150,6 +150,26 @@ export function resolveTypeRef(ctx: CompilerContext, type: AstType): TypeRef {
                 optional: true,
             };
         }
+        case "either_type": {
+            if (type.leftType.kind !== "type_id") {
+                throwInternalCompilerError(
+                    "Only either type identifiers are supported now",
+                    type.leftType.loc,
+                );
+            }
+            if (type.rightType.kind !== "type_id") {
+                throwInternalCompilerError(
+                    "Only either type identifiers are supported now",
+                    type.rightType.loc,
+                );
+            }
+
+            return {
+                kind: "either",
+                left: resolveTypeRef(ctx, type.leftType),
+                right: resolveTypeRef(ctx, type.rightType),
+            };
+        }
         case "map_type": {
             const keyTy = getType(ctx, idText(type.keyType));
             const valTy = getType(ctx, idText(type.valueType));
@@ -213,6 +233,15 @@ function buildTypeRef(
                 kind: "ref",
                 name: idText(type.typeArg),
                 optional: true,
+            };
+        }
+        case "either_type": {
+            const left = buildTypeRef(type.leftType, types);
+            const right = buildTypeRef(type.rightType, types);
+            return {
+                kind: "either",
+                left,
+                right,
             };
         }
         case "map_type": {
@@ -1207,7 +1236,10 @@ export function resolveDescriptors(ctx: CompilerContext) {
                                         ast: d,
                                     });
                                 }
-                            } else if (param.type.kind === "optional_type") {
+                            } else if (
+                                param.type.kind === "optional_type" ||
+                                param.type.kind === "either_type"
+                            ) {
                                 throwCompilationError(
                                     "Bounce receive function cannot have optional parameter",
                                     d.loc,
@@ -2107,6 +2139,7 @@ function checkRecursiveTypes(ctx: CompilerContext): void {
                 // do nothing
                 case "void":
                 case "null":
+                case "either":
                     break;
             }
         }

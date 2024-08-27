@@ -302,6 +302,7 @@ export type AstStatementForEach = {
 export type AstType =
     | AstTypeId
     | AstOptionalType
+    | AstEitherType
     | AstMapType
     | AstBouncedMessageType;
 
@@ -315,6 +316,14 @@ export type AstTypeId = {
 export type AstOptionalType = {
     kind: "optional_type";
     typeArg: AstType;
+    id: number;
+    loc: SrcInfo;
+};
+
+export type AstEitherType = {
+    kind: "either_type";
+    leftType: AstType;
+    rightType: AstType;
     id: number;
     loc: SrcInfo;
 };

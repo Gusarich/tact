@@ -50,6 +50,7 @@ import {
     AstOptionalType,
     AstNode,
     AstFuncId,
+    AstEitherType,
 } from "./ast";
 import { AstRenamer } from "./rename";
 import { throwInternalCompilerError } from "../errors";
@@ -532,6 +533,17 @@ export class AstComparator {
                 const { typeArg: optionalTypeArg1 } = node1 as AstOptionalType;
                 const { typeArg: optionalTypeArg2 } = node2 as AstOptionalType;
                 return this.compare(optionalTypeArg1, optionalTypeArg2);
+            }
+
+            case "either_type": {
+                const { leftType: leftType1, rightType: rightType1 } =
+                    node1 as AstEitherType;
+                const { leftType: leftType2, rightType: rightType2 } =
+                    node2 as AstEitherType;
+                return (
+                    this.compare(leftType1, leftType2) &&
+                    this.compare(rightType1, rightType2)
+                );
             }
 
             case "map_type": {

@@ -664,7 +664,7 @@ Line 2, col 19:
 `;
 
 exports[`grammar should fail struct-missing-semicolon-between-fields 1`] = `
-"<unknown>:2:19: Parse error: expected "}", ";", "=", "as", or "?"
+"<unknown>:2:19: Parse error: expected "}", ";", "=", "as", "or", or "?"
 
 Line 2, col 19:
   1 | // missing ; between fields

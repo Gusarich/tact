@@ -25,8 +25,10 @@ Tact {
 
     NativeFunctionDecl = "@name" "(" funcId ")" FunctionAttribute* native id Parameters (":" Type)? ";"
 
-    Type = typeId "?" --optional
+    Type = Type "?" --optional
+         | Type "or" Type --either
          | typeId --regular
+         | "(" Type ")" --parenthesized
          | map "<" typeId (as id)? "," typeId (as id)? ">" --map
          | "bounced" "<" typeId ">" --bounced
 
