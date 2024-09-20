@@ -921,4 +921,26 @@ contract StructsTester {
     get fun uintFieldsFromCell(src: Cell): UintFields {
         return UintFields.fromCell(src);
     }
+
+    get fun destructuringTest1(): Int {
+        let s = S {
+            a: true,
+            b: 42
+        };
+
+        let {a, b} = s;
+
+        return (a ? 1 : 0) + b;
+    }
+
+    get fun destructuringTest2(): Int {
+        let s = S {
+            a: true,
+            b: 42
+        };
+
+        let {_, b} = s;
+
+        return b;
+    }
 }

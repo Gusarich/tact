@@ -402,5 +402,9 @@ describe("structs", () => {
             to: treasure.address,
             body: beginCell().storeDict(m).endCell(),
         });
+
+        // Struct destructuring
+        expect(await contract.getDestructuringTest1()).toBe(43n);
+        expect(await contract.getDestructuringTest2()).toBe(42n);
     });
 });
