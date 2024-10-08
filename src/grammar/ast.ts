@@ -323,7 +323,7 @@ export type AstStatementForEach = {
 
 export type AstStatementDestruct = {
     kind: "statement_destruct";
-    identifiers: AstId[];
+    identifiers: AstDestructMapping[];
     expression: AstExpression;
     id: number;
     loc: SrcInfo;
@@ -582,6 +582,14 @@ export const selfId: AstId = {
     loc: dummySrcInfo,
 };
 
+export type AstDestructMapping = {
+    kind: "destruct_mapping";
+    from: AstId;
+    name: AstId;
+    id: number;
+    loc: SrcInfo;
+};
+
 export type AstNumber = {
     kind: "number";
     base: AstNumberBase;
@@ -688,6 +696,7 @@ export type AstReceiverKind =
 
 export type AstNode =
     | AstFuncId
+    | AstDestructMapping
     | AstExpression
     | AstStatement
     | AstTypeDecl
