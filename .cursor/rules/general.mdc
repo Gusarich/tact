@@ -1,9 +1,7 @@
 ---
-description: General Description of Tact Monorepo
+description: Project Overview, Repository Structure and Development Workflow 
 globs: **/*
 ---
-# General Description
-
 ## Overview
 This repository contains the Tact smart contract programming language, which transpiles to FunC and compiles down to TVM bytecode.
 
@@ -28,15 +26,15 @@ Tact is implemented in TypeScript and requires Node.js 22 or later. The compiler
 - `/.github/` – CI/CD workflows and GitHub-specific configurations.
 
 ### Compiler Components (`/src/` folder)
-- `/src/abi/` – Type-checking and generation of functions, including [global.ts](mdc:src/abi/global.ts), [map.ts](mdc:src/abi/map.ts), and [struct.ts](mdc:src/abi/struct.ts).
-- `/src/ast/` – Abstract Syntax Tree (AST) definitions, primarily in [ast.ts](mdc:src/ast/ast.ts).
+- `/src/abi/` – Type-checking and generation of functions, including `global.ts`, `map.ts`, and `struct.ts`.
+- `/src/ast/` – Abstract Syntax Tree (AST) definitions, primarily in `ast.ts`.
 - `/src/bindings/` – Code generation for smart contract wrappers.
 - `/src/cli/` – Command-line interface implementation.
 - `/src/config/` – Configuration management, including `tact.config.json` schema definitions.
 - `/src/context/` – Compiler context management.
 - `/src/error/` – Error message definitions for the compiler.
-- `/src/func/` – FunC integration and transpilation logic, with the main implementation in [funcCompile.ts](mdc:src/func/funcCompile.ts).
-- `/src/generate/` – Transpiled FunC code generation, with an entry point in [writeProgram.ts](mdc:src/generator/writeProgram.ts).
+- `/src/func/` – FunC integration and transpilation logic, with the main implementation in `funcCompile.ts`.
+- `/src/generate/` – Transpiled FunC code generation, with an entry point in `writeProgram.ts`.
 - `/src/grammar/` – Grammar definitions:
   - `prev/` and `next/` versions are maintained concurrently.
 - `/src/imports/` – Import resolution for Tact smart contract sources.
@@ -58,10 +56,10 @@ Tact is implemented in TypeScript and requires Node.js 22 or later. The compiler
   - `e2e-emulated/` – End-to-end testing of smart contracts, message interactions, and get method calls.
   - `exit-codes/` – Tests for specific TVM exit codes.
 - `/src/types/` – Type-checking system:
-  - [resolveDescriptors.ts](mdc:src/types/resolveDescriptors.ts) – Validates module-level items.
-  - [resolveStatements.ts](mdc:src/types/resolveStatements.ts) – Ensures statement correctness.
-  - [resolveExpression.ts](mdc:src/types/resolveExpression.ts) – Type-checks expressions.
-- `/src/utils/` – Utility functions, including [crc16.ts](mdc:src/utils/crc16.ts), [crc32.ts](mdc:src/utils/crc32.ts), [sha256.ts](mdc:src/utils/sha256.ts) and other.
+  - `resolveDescriptors.ts` – Validates module-level items.
+  - `resolveStatements.ts` – Ensures statement correctness.
+  - `resolveExpression.ts` – Type-checks expressions.
+- `/src/utils/` – Utility functions, including `crc16.ts`, `crc32.ts`, `sha256.ts` and other.
 - `/src/vfs/` – Virtual file system for controlled FunC compiler interaction.
 
 ## Development Workflow
@@ -115,8 +113,6 @@ When making changes to the codebase, follow this standard process to ensure corr
    Many tests rely on Jest snapshots, which may need to be updated if expected outputs change.
    - To update snapshots while running tests, add the `-u` flag:
      `yarn test -u`
-   - Before updating snapshots, carefully review the changes to ensure they are expected and correct.
+   - Before updating snapshots, carefully review the changes to ensure they acorrect.
 
 Following this structured workflow helps maintain consistency, catch issues early, and prevent regressions.
-
-Refer to [CONTRIBUTING.md](mdc:dev-docs/CONTRIBUTING.md) for additional details.
