@@ -1,0 +1,102 @@
+---
+description: General Description of Tact Monorepo
+globs: **/*
+---
+# General Description
+
+## Overview
+This repository contains the Tact smart contract programming language, which transpiles to FunC and compiles down to TVM bytecode.
+
+The Tact compiler processes `.tact` source files through the following stages:
+- Parsing into an Abstract Syntax Tree (AST).
+- Type-checking and semantic validation.
+- Transpilation into FunC, followed by compilation to Fift and TVM bytecode in BoC (Bag of Cells) format.
+- Generation of TypeScript wrappers for testing contracts in a simulated blockchain environment.
+- Production of Markdown and JSON summaries, including contract storage layouts, TL-B schemas, and exit codes.
+
+Tact is implemented in TypeScript and requires Node.js 22 or later. The compiler relies on a patched version of the FunC compiler, which is vendored as a WASM binary.
+
+## Repository Structure
+
+### Root-Level Folders
+- `/bin/` – Command-line interface entry points.
+- `/dev-docs/` – Developer documentation, including [CHANGELOG.md](mdc:dev-docs/CHANGELOG.md), [CONTRIBUTING.md](mdc:dev-docs/CONTRIBUTING.md) and [STYLEGUIDE.md](mdc:dev-docs/STYLEGUIDE.md).
+- `/docs/` – User documentation and guides.
+- `/examples/` – Example Tact contracts and usage scenarios.
+- `/spell/` – Spellchecker ignore lists.
+- `/src/` – Compiler components.
+- `/.github/` – CI/CD workflows and GitHub-specific configurations.
+
+### Compiler Components (`/src/` folder)
+- `/src/abi/` – Type-checking and generation of functions, including [global.ts](mdc:src/abi/global.ts), [map.ts](mdc:src/abi/map.ts), and [struct.ts](mdc:src/abi/struct.ts).
+- `/src/ast/` – Abstract Syntax Tree (AST) definitions, primarily in [ast.ts](mdc:src/ast/ast.ts).
+- `/src/bindings/` – Code generation for smart contract wrappers.
+- `/src/cli/` – Command-line interface implementation.
+- `/src/config/` – Configuration management, including `tact.config.json` schema definitions.
+- `/src/context/` – Compiler context management.
+- `/src/error/` – Error message definitions for the compiler.
+- `/src/func/` – FunC integration and transpilation logic, with the main implementation in [funcCompile.ts](mdc:src/func/funcCompile.ts).
+- `/src/generate/` – Transpiled FunC code generation, with an entry point in [writeProgram.ts](mdc:src/generator/writeProgram.ts).
+- `/src/grammar/` – Grammar definitions:
+  - `prev/` and `next/` versions are maintained concurrently.
+- `/src/imports/` – Import resolution for Tact smart contract sources.
+- `/src/optimizer/` – Smart contract optimizations, including constant evaluation.
+- `/src/packaging/` – `.pkg` package generation for compiled contracts.
+- `/src/pipeline/` – Compiler pipeline:
+  - `build.ts` – High-level compilation logic.
+  - `precompile.ts` – Import resolution, type-checking, and schema generation.
+- `/src/server/` – Tact compiler server for custom error logging.
+- `/src/stdlib/` – Standard library:
+  - `std/` – Automatically loaded ambient definitions.
+  - `libs/` – Importable standard library modules (`@stdlib/...`).
+- `/src/storage/` – Smart contract persistent storage allocations.
+- `/src/test/` – Compiler tests:
+  - `benchmarks/` – Performance benchmarks and gas optimization tracking.
+  - `codegen/` – Ensures successful compilation without runtime tests, often used for FunC bug fixes.
+  - `compilation-failed/` – Ensures failed compilations produce correct error messages.
+  - `contracts/` – Tact smart contracts for testing the pretty-printer.
+  - `e2e-emulated/` – End-to-end testing of smart contracts, message interactions, and get method calls.
+  - `exit-codes/` – Tests for specific TVM exit codes.
+- `/src/types/` – Type-checking system:
+  - [resolveDescriptors.ts](mdc:src/types/resolveDescriptors.ts) – Validates module-level items.
+  - [resolveStatements.ts](mdc:src/types/resolveStatements.ts) – Ensures statement correctness.
+  - [resolveExpression.ts](mdc:src/types/resolveExpression.ts) – Type-checks expressions.
+- `/src/utils/` – Utility functions, including [crc16.ts](mdc:src/utils/crc16.ts), [crc32.ts](mdc:src/utils/crc32.ts), [sha256.ts](mdc:src/utils/sha256.ts) and other.
+- `/src/vfs/` – Virtual file system for controlled FunC compiler interaction.
+
+## Development Guidelines
+
+### Code Style
+Tact enforces strict TypeScript best practices to ensure correctness and security.
+
+- Do not use unsafe TypeScript features:
+  - `any`, `as`, `@ts-ignore`, `x!` (non-null assertions) are prohibited.
+  - Use `satisfies` instead of `as` for type assertions.
+- Prefer immutable patterns:
+  - Use `const` instead of `let`.
+  - Mark object properties and arrays as `readonly`.
+- Avoid unsafe TypeScript constructs:
+  - Optional object fields (`foo?: Bar`) should be replaced with explicit `foo: Bar | undefined`.
+  - Unions requiring `in` checks should be avoided.
+
+### Linting and Formatting
+- Use `yarn lint:all` to check for code style violations.
+- Run `yarn spell` to ensure correct spelling in documentation and code comments.
+
+### Testing and Benchmarks
+- Run all tests:
+  `yarn test`
+- Update Jest snapshots when modifying tests:
+  `yarn test -u`
+- Run benchmarks to track gas usage:
+  `yarn bench`
+
+## Contribution Workflow
+
+- When modifying the standard library, update [stdlib.ts](mdc:src/stdlib/stdlib.ts):
+  `yarn gen:stdlib`
+- If adding or modifying a `.tact` test contract, compile it and generate TypeScript wrappers:
+  `yarn gen`
+- When modifying FunC code generation, run end-to-end tests:
+  `yarn test:e2e`
+- Refer to [CONTRIBUTING.md](mdc:dev-docs/CONTRIBUTING.md) for additional details.
