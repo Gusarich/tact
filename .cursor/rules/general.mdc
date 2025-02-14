@@ -64,39 +64,59 @@ Tact is implemented in TypeScript and requires Node.js 22 or later. The compiler
 - `/src/utils/` – Utility functions, including [crc16.ts](mdc:src/utils/crc16.ts), [crc32.ts](mdc:src/utils/crc32.ts), [sha256.ts](mdc:src/utils/sha256.ts) and other.
 - `/src/vfs/` – Virtual file system for controlled FunC compiler interaction.
 
-## Development Guidelines
+## Development Workflow
 
-### Code Style
-Tact enforces strict TypeScript best practices to ensure correctness and security.
+When making changes to the codebase, follow this standard process to ensure correctness and maintainability:
 
-- Do not use unsafe TypeScript features:
-  - `any`, `as`, `@ts-ignore`, `x!` (non-null assertions) are prohibited.
-  - Use `satisfies` instead of `as` for type assertions.
-- Prefer immutable patterns:
-  - Use `const` instead of `let`.
-  - Mark object properties and arrays as `readonly`.
-- Avoid unsafe TypeScript constructs:
-  - Optional object fields (`foo?: Bar`) should be replaced with explicit `foo: Bar | undefined`.
-  - Unions requiring `in` checks should be avoided.
+1. Edit the codebase
+   Make your modifications to the relevant files.
 
-### Linting and Formatting
-- Use `yarn lint:all` to check for code style violations.
-- Run `yarn spell` to ensure correct spelling in documentation and code comments.
+2. Check for linting and other issues
+   Run:
+   `yarn lint:all`
+   This checks for ESLint violations, Prettier formatting issues, spelling errors, and unused dependencies.
+   Fix any issues and re-run the command until the checks pass.
 
-### Testing and Benchmarks
-- Run all tests:
-  `yarn test`
-- Update Jest snapshots when modifying tests:
-  `yarn test -u`
-- Run benchmarks to track gas usage:
-  `yarn bench`
+3. Regenerate necessary files
+   Depending on what was changed, run the appropriate `yarn gen` command:
+   - General regeneration (most common step after edits):
+     `yarn gen`
+     This regenerates grammar files, the standard library, FunC bindings, and contract wrappers.
+   - Specific regeneration commands:
+     - `yarn gen:stdlib` – After modifying files in `src/stdlib/`.
+     - `yarn gen:grammar` – After modifying `src/grammar/`.
+     - `yarn gen:func-js` – After modifying FunC transpilation logic.
+     - `yarn gen:contracts:test` – After adding or modifying test contracts.
+     - `yarn gen:contracts:benchmarks` – After adding new benchmark contracts.
 
-## Contribution Workflow
+   Note: `yarn build` is generally only needed when modifying CLI-related components. If you change the CLI behavior, run:
+   `yarn build`
 
-- When modifying the standard library, update [stdlib.ts](mdc:src/stdlib/stdlib.ts):
-  `yarn gen:stdlib`
-- If adding or modifying a `.tact` test contract, compile it and generate TypeScript wrappers:
-  `yarn gen`
-- When modifying FunC code generation, run end-to-end tests:
-  `yarn test:e2e`
-- Refer to [CONTRIBUTING.md](mdc:dev-docs/CONTRIBUTING.md) for additional details.
+4. Run relevant tests
+   - If your changes only affect a specific part of the codebase, run targeted tests:
+     - Grammar parsing:
+       `yarn test grammar`
+     - Type checking:
+       `yarn test resolve`
+     - Standard library functions:
+       `yarn test stdlib`
+     - Map-related features:
+       `yarn test map`
+     - End-to-end contract execution:
+       `yarn test e2e-emulated`
+     - Error handling and exit codes:
+       `yarn test exit-codes`
+   - If your changes could impact multiple parts, it is recommended to run all tests:
+     `yarn test`
+   - Before running tests, ensure all necessary files are up to date by running:
+     `yarn gen && yarn test`
+
+5. Update test snapshots if necessary
+   Many tests rely on Jest snapshots, which may need to be updated if expected outputs change.
+   - To update snapshots while running tests, add the `-u` flag:
+     `yarn test -u`
+   - Before updating snapshots, carefully review the changes to ensure they are expected and correct.
+
+Following this structured workflow helps maintain consistency, catch issues early, and prevent regressions.
+
+Refer to [CONTRIBUTING.md](mdc:dev-docs/CONTRIBUTING.md) for additional details.
