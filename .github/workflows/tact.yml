@@ -19,6 +19,7 @@ jobs:
         uses: anthropics/claude-code-base-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           mcp_config: ".github/MCP/mcp-config.json"
           allowed_tools: "mcp__github__create_pull_request_review,mcp__github__add_pull_request_review_comment"
           prompt_file: ".github/PROMPTS/review.txt"
