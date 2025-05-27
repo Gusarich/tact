@@ -26,13 +26,33 @@ jobs:
         if: steps.code-review.outputs.conclusion == 'success'
         uses: actions/github-script@v7
         env:
-          REVIEW_BODY: ${{ steps.code-review.outputs.result }}
+          EXEC_FILE: ${{ steps.code-review.outputs.execution_file }}
         with:
           script: |
-            github.rest.pulls.createReview({
+            const fs   = require('fs');
+            const log  = JSON.parse(fs.readFileSync(process.env.EXEC_FILE,'utf8'));
+
+            // last assistant message that actually contains text
+            const assistant = [...log].reverse()
+              .find(m => m.role === 'assistant' && m.content?.length);
+
+            if (!assistant)
+              throw new Error('No assistant message found in execution log');
+
+            const body = assistant.content
+              .filter(p => p.type === 'text')
+              .map(p => p.text.trim())
+              .join('\n\n');
+
+            if (!body)
+              throw new Error('Assistant message had no text parts');
+
+            const res = await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo:  context.repo.repo,
               pull_number: context.issue.number,
-              event: 'COMMENT',          // or 'APPROVE'
-              body: process.env.REVIEW_BODY
+              event: 'COMMENT',    // or 'APPROVE' / 'REQUEST_CHANGES'
+              body
             });
+
+            core.info(`✅  review #${res.data.id} posted`);
