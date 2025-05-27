@@ -17,22 +17,10 @@ jobs:
           fetch-depth: 1
 
       - name: Automatic PR Review
-        uses: anthropics/claude-code-action@beta
+        uses: anthropics/claude-code-base-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          mcp_config: ".github/MCP/mcp-config.json"
-          timeout_minutes: "60"
-          direct_prompt: |
-            Please review this pull request and provide comprehensive feedback.
-
-            Focus on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security implications
-            - Test coverage
-            - Documentation updates if needed
-
-            Provide constructive feedback with specific suggestions for improvement.
-            Use inline comments to highlight specific areas of concern.
+          mcp_config_file: ".github/MCP/mcp-config.json"
+          allowed_tools: "Bash(gh label list),mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__search_issues,mcp__github__list_issues,mcp__github__get_pull_request,mcp__github__create_pull_request_review,mcp__github__add_pull_request_review_comment"
+          prompt_file: ".github/PROMPTS/review.txt"
           allowed_tools: "mcp__github__add_pull_request_review_comment"

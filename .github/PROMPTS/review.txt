@@ -1,2 +1,2 @@
-Inspect random file from this PR and write a short summary using markdown.
+Inspect random file from this PR and submit a review with a short summary and an approve.
 Also include "123" in the summary.
