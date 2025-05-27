@@ -1,2 +1,3 @@
-Inspect random file from this PR and submit a review with a short summary and an approve.
+Inspect random file from this PR and write a review with a short summary using markdown.
 Also include "123" in the summary.
+Do not try to submit the review, or call any `gh` commands. Just write the review as your final message.
