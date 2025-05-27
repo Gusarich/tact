@@ -22,30 +22,27 @@ jobs:
           allowed_tools: "View,GlobTool,GrepTool,Bash"  # keep it simple
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
-      - name: Post PR review
+      - name: Extract and Comment PR Review
         if: steps.code-review.outputs.conclusion == 'success'
         uses: actions/github-script@v7
-        env:
-          EXEC_FILE: ${{ steps.code-review.outputs.execution_file }}
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs   = require('fs');
-            const log  = JSON.parse(fs.readFileSync(process.env.EXEC_FILE,'utf8'));
+            const fs = require('fs');
+            const executionFile = '${{ steps.code-review.outputs.execution_file }}';
+            const executionLog = JSON.parse(fs.readFileSync(executionFile, 'utf8'));
 
-            // last assistant message that actually contains text
-            const assistant = [...log].reverse()
-              .find(m => m.role === 'assistant' && m.content?.length);
+            // Extract the review content from the execution log
+            // The execution log contains the full conversation including Claude's responses
+            let review = '';
 
-            if (!assistant)
-              throw new Error('No assistant message found in execution log');
-
-            const body = assistant.content
-              .filter(p => p.type === 'text')
-              .map(p => p.text.trim())
-              .join('\n\n');
-
-            if (!body)
-              throw new Error('Assistant message had no text parts');
+            // Find the last assistant message which should contain the review
+            for (let i = executionLog.length - 1; i >= 0; i--) {
+              if (executionLog[i].role === 'assistant') {
+                review = executionLog[i].content;
+                break;
+              }
+            }
 
             const res = await github.rest.pulls.createReview({
               owner: context.repo.owner,
