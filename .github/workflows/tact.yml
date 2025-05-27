@@ -20,6 +20,7 @@ jobs:
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          mcp_config: ".github/MCP/mcp-config.json"
           timeout_minutes: "60"
           direct_prompt: |
             Please review this pull request and provide comprehensive feedback.
