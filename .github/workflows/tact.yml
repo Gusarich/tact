@@ -49,7 +49,7 @@ jobs:
               repo:  context.repo.repo,
               pull_number: context.issue.number,
               event: 'COMMENT',    // or 'APPROVE' / 'REQUEST_CHANGES'
-              body
+              body: review
             });
 
             core.info(`✅  review #${res.data.id} posted`);
