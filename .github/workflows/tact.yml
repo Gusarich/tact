@@ -32,6 +32,9 @@ jobs:
             const executionFile = '${{ steps.code-review.outputs.execution_file }}';
             const executionLog = JSON.parse(fs.readFileSync(executionFile, 'utf8'));
 
+            core.info(executionFile);
+            core.info(executionLog);
+
             // Extract the review content from the execution log
             // The execution log contains the full conversation including Claude's responses
             let review = 'Empty response from Claude';
