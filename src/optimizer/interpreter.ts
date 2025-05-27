@@ -1657,11 +1657,22 @@ export class Interpreter {
                             );
                         }
                         case "asm_function_def":
-                            throwNonFatalErrorConstEval(
-                                `${idTextErr(ast.function)} cannot be interpreted because it's an asm-function`,
-                                ast.loc,
+                            // Currently, no attribute is supported
+                            if (functionNode.attributes.length > 0) {
+                                throwNonFatalErrorConstEval(
+                                    "calls to functions with attributes are currently not supported",
+                                    ast.loc,
+                                );
+                            }
+                            return this.inComputationPath(
+                                `${functionDescription.name}()`,
+                                () =>
+                                    this.evalStaticAsmFunction(
+                                        functionNode,
+                                        ast.args,
+                                        functionDescription.returns,
+                                    ),
                             );
-                            break;
                         case "function_decl":
                             throwNonFatalErrorConstEval(
                                 `${idTextErr(ast.function)} cannot be interpreted because it does not have a body`,
@@ -1756,6 +1767,15 @@ export class Interpreter {
             },
             { names: paramNames, values: argValues },
         );
+    }
+
+    private evalStaticAsmFunction(
+        functionCode: Ast.AsmFunctionDef,
+        args: readonly Ast.Expression[],
+        returns: TypeRef,
+    ): Ast.Literal {
+        console.log("evalStaticAsmFunction", functionCode, args, returns);
+        return this.util.makeNullLiteral(dummySrcInfo);
     }
 
     private interpretStatementInternal(ast: Ast.Statement) {
