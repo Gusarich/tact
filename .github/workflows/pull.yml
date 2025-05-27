@@ -42,6 +42,7 @@ jobs:
           yarn install
 
       - name: Run Claude Code with prompt file
+        id: code-review
         uses: anthropics/claude-code-base-action@beta
         with:
           prompt_file: ".github/PROMPTS/review.txt"
