@@ -41,9 +41,9 @@ jobs:
 
             // Find the last assistant message which should contain the review
             for (let i = executionLog.length - 1; i >= 0; i--) {
-              core.info(executionLog[i].role, executionLog[i].content);
-              if (executionLog[i].role === 'assistant') {
-                review = executionLog[i].content;
+              core.info(executionLog[i].type, executionLog[i].message.role, executionLog[i].message.content);
+              if (executionLog[i].type === 'assistant' && executionLog[i].message.role === 'assistant') {
+                review = executionLog[i].message.content;
                 break;
               }
             }
