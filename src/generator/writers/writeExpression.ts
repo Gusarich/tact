@@ -390,6 +390,43 @@ const writeBinaryExpr =
                 wCtx.used(`__tact_int_${op}_nullable_left`);
                 return `__tact_int_${op}_nullable_left(${writeExpression(f.left, wCtx)}, ${writeExpression(f.right, wCtx)})`;
             }
+
+            // Boolean comparison optimization
+            if (
+                lt.name === "Bool" &&
+                rt.name === "Bool" &&
+                !lt.optional &&
+                !rt.optional
+            ) {
+                const left = constEval(f.left, wCtx.ctx);
+                const right = constEval(f.right, wCtx.ctx);
+
+                const writeLeft = () => `(${writeExpression(left, wCtx)})`;
+                const writeRight = () => `(${writeExpression(right, wCtx)})`;
+
+                if (f.op === "==") {
+                    if (right.kind === "boolean") {
+                        return right.value
+                            ? writeLeft()
+                            : `(~ ${writeExpression(left, wCtx)})`;
+                    } else if (left.kind === "boolean") {
+                        return left.value
+                            ? writeRight()
+                            : `(~ ${writeExpression(right, wCtx)})`;
+                    }
+                } else if (f.op === "!=") {
+                    if (right.kind === "boolean") {
+                        return right.value
+                            ? `(~ ${writeExpression(left, wCtx)})`
+                            : writeLeft();
+                    } else if (left.kind === "boolean") {
+                        return left.value
+                            ? `(~ ${writeExpression(right, wCtx)})`
+                            : writeRight();
+                    }
+                }
+            }
+
             if (f.op === "==") {
                 return `(${writeExpression(f.left, wCtx)} == ${writeExpression(f.right, wCtx)})`;
             } else {

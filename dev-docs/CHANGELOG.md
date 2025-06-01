@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Code generation
+
+- Optimized `Bool` equality comparison with constant values: PR [#3322](https://github.com/tact-lang/tact/pull/3322)
+
 ### Docs
 
 - Described off-chain calls and mention exit code 11 for getters: PR [#3314](https://github.com/tact-lang/tact/pull/3314)

@@ -12,6 +12,7 @@ import {
     MultiplyZero,
     NegateFalse,
     NegateTrue,
+    BoolEqualityWithConst,
     OrFalse,
     OrSelf,
     OrTrue,
@@ -52,6 +53,7 @@ export class StandardOptimizer implements ExpressionTransformer {
             { priority: 16, rule: new DoubleNegation() },
             { priority: 17, rule: new NegateTrue() },
             { priority: 18, rule: new NegateFalse() },
+            { priority: 19, rule: new BoolEqualityWithConst() },
         ];
 
         // Sort according to the priorities: smaller number means greater priority.

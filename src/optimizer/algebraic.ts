@@ -561,3 +561,41 @@ export class NegateFalse extends Rule {
         return ast;
     }
 }
+
+export class BoolEqualityWithConst extends Rule {
+    public applyRule(
+        ast: Ast.Expression,
+        { util }: ExpressionTransformer,
+    ): Ast.Expression {
+        if (checkIsBinaryOpNode(ast)) {
+            const node = ast as Ast.OpBinary;
+            if (node.op === "==" || node.op === "!=") {
+                const leftIsTrue = checkIsBoolean(node.left, true);
+                const leftIsFalse = checkIsBoolean(node.left, false);
+                const rightIsTrue = checkIsBoolean(node.right, true);
+                const rightIsFalse = checkIsBoolean(node.right, false);
+
+                if (leftIsTrue || leftIsFalse || rightIsTrue || rightIsFalse) {
+                    let expr: Ast.Expression;
+                    if (leftIsTrue || rightIsTrue) {
+                        expr = leftIsTrue ? node.right : node.left;
+                        if (node.op === "!=") {
+                            return util.makeUnaryExpression("!", expr);
+                        }
+                        return expr;
+                    }
+
+                    if (leftIsFalse || rightIsFalse) {
+                        expr = leftIsFalse ? node.right : node.left;
+                        if (node.op === "==") {
+                            return util.makeUnaryExpression("!", expr);
+                        }
+                        return expr;
+                    }
+                }
+            }
+        }
+
+        return ast;
+    }
+}
