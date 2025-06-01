@@ -212,6 +212,10 @@ fun elseif(op: Int): Int {
     else { return 44 }
 }
 
+asm fun asmDouble(a: Int): Int {
+    DUP ADD
+}
+
 contract ConstantTester {
     const something1: Int = 10 + 1;
     const something2: Int? = null;
@@ -282,6 +286,8 @@ contract ConstantTester {
 
     const something45: Int = elseif(2);
 
+    const something46: Int = asmDouble(10);
+
     init() { }
 
     receive() { }
@@ -331,6 +337,7 @@ contract ConstantTester {
     get fun something43(): Address { return self.something43; }
     get fun something44(): Address { return self.something44; }
     get fun something45(): Int { return self.something45; }
+    get fun something46(): Int { return self.something46; }
 
     get fun globalConst1(): Int { return globalConst1; }
     get fun globalConst2(): Int { return globalConst2; }
